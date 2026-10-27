@@ -158,6 +158,9 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
 .kv-row > .v{padding:10px 12px;min-width:0}
 .kv-row .choices{margin-top:0}
 .kv-row.has-err > .v{background:var(--warn-soft)}
+.hr-box{margin-top:14px}
+.hr-notice{font-size:13.5px;background:var(--accent-soft);padding:10px 14px;border-radius:4px;margin-bottom:10px;line-height:1.7}
+.kv-row .v input[type=text]{max-width:28rem}
 .note{font-size:13px;color:var(--warn);margin-top:10px}
 
 /* actions */
@@ -212,6 +215,7 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
       <button type="button" data-s="p2">第2部</button>
       <button type="button" data-s="p3">第3部</button>
       <button type="button" data-s="op">ご意見</button>
+      <button type="button" data-s="hr">ヒアリング</button>
     </nav>
   </div>
 </header>
@@ -244,7 +248,7 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
     <p class="lead">本調査は、日本老年薬学会会員の先生方を対象に、臨床で経験された服薬簡素化の事例を収集し、服薬簡素化に該当する薬剤の実態を明らかにすることを目的としています。参加は任意であり、回答しないことによる不利益は一切ありません。回収したデータは統計的に処理し、個人が特定される形での公表は行いません。</p>
     <div class="ethics" tabindex="0" aria-label="研究についての説明">
       <h3>1. 研究の名称及び当該研究の実施について研究機関の長の許可を受けている旨</h3>
-      <p>研究課題名：「日本老年薬学会会員を対象とした服薬簡素化の実態に関するアンケート調査」本研究課題については、AMG医療法人社団哺育会 桜ヶ丘中央病院 倫理審査委員会による倫理審査を経て、R81019の実施許可を受けております。</p>
+      <p>研究課題名：「日本老年薬学会会員を対象とした服薬簡素化の実態に関するアンケート調査」本研究課題については、AMG医療法人社団哺育会 桜ヶ丘中央病院 倫理審査委員会による倫理審査を経て、●●の実施許可を受けております。</p>
       <h3>2. 研究機関の名称及び責任者</h3>
       <p>日本老年薬学会 服薬簡素化活性化ワーキンググループ<br>研究責任者（代表）丸岡 弘治（介護老人保健施設横浜あおばの里）<br>研究分担者　秋下 雅弘（東京都健康長寿医療センター）、新井 克明（大洗海岸病院）、黄倉 崇（帝京大学）、大河内 二郎（介護老人保健施設竜間之郷）、倉田 なおみ（昭和医科大学）、糀屋 絵理子（大阪大学）、竹屋 泰（大阪大学大学院）、篠永 浩（三豊総合病院）、早乙女 彩子（のぞみ薬局）、浜田 将太（東京薬科大学）、東原 和美（バプテスト老人保健施設）、溝神 文博（国立長寿医療研究センター）</p>
       <h3>3. 研究の目的及び意義</h3>
@@ -350,6 +354,20 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
     <div class="q">
       <label class="q-label" for="comment">その他、服薬簡素化に関するご意見やご要望がありましたらご自由にお書きください。<span class="opttag">任意</span></label>
       <textarea id="comment" class="tall" style="margin-top:8px"></textarea>
+    </div>
+  </section>
+
+  <section class="part" id="s-hr" data-s="hr">
+    <div class="part-head"><h2>追加ヒアリングへのご協力</h2><span class="tag">任意</span></div>
+    <p class="lead">ご回答いただいた事例について、詳細をお伺いする追加ヒアリングを予定しています。ご協力いただける方は、下記に氏名と連絡先をご記入ください。<b>記入は任意です。</b>空欄のまま送信しても、アンケートへの回答として受け付けます。</p>
+    <div class="hr-box">
+      <div class="hr-notice">記入いただいた氏名・連絡先は、追加ヒアリングのご連絡の目的にのみ使用します。ご協力いただける場合は、氏名と、メールアドレスまたは電話番号のいずれかをご記入ください（所属は任意です）。</div>
+      <div class="kv">
+        <div class="kv-row" data-req="hr_name"><div class="k">氏名<small>任意</small></div><div class="v"><input type="text" id="hr_name" autocomplete="off" maxlength="100" placeholder="例：老年 太郎"><div class="errmsg own">ご協力いただける場合は、氏名をご記入ください。</div></div></div>
+        <div class="kv-row" data-req="hr_aff"><div class="k">所属<small>任意</small></div><div class="v"><input type="text" id="hr_aff" autocomplete="off" maxlength="200" placeholder="例：介護老人保健施設 ○○（施設名・部署）"><div class="errmsg own"></div></div></div>
+        <div class="kv-row" data-req="hr_email"><div class="k">メールアドレス<small>任意</small></div><div class="v"><input type="text" id="hr_email" inputmode="email" autocomplete="off" maxlength="200" placeholder="例：example@jsgp.or.jp"><div class="errmsg own">メールアドレスの形式をご確認ください。</div></div></div>
+        <div class="kv-row" data-req="hr_tel"><div class="k">電話番号<small>任意</small></div><div class="v"><input type="text" id="hr_tel" inputmode="tel" autocomplete="off" maxlength="40" placeholder="例：090-1234-5678"><div class="errmsg own">メールアドレスまたは電話番号のいずれかをご記入ください。</div></div></div>
+      </div>
     </div>
   </section>
 
@@ -491,13 +509,14 @@ function collect(){
     q3: val("q3"), q3_other: val("q3")==="その他"?txt("q3_other"):"",
     p1: parts.p1, p2: parts.p2,
     p3: {age:val("age"), sex:val("sex"), care:val("care"), background:txt("p3_bg"), rx_before:txt("p3_rxb"), rx_after:txt("p3_rxa"), point:txt("p3_pt")},
-    use: val("use"), comment: txt("comment")
+    use: val("use"), comment: txt("comment"),
+    hearing: {name:txt("hr_name"), affiliation:txt("hr_aff"), email:txt("hr_email"), tel:txt("hr_tel")}
   };
 }
 
 /* ---------- validation ---------- */
 function validate(){
-  const errs = {consent:[],basic:[],p1:[],p2:[],p3:[],op:[]};
+  const errs = {consent:[],basic:[],p1:[],p2:[],p3:[],op:[],hr:[]};
   const mark = (el, bad, msg) => { el.classList.toggle("has-err", bad); if(msg!==undefined){ const m=$(".errmsg",el); if(m && bad) m.textContent=msg; } return bad; };
   // consent
   const c = val("consent");
@@ -527,6 +546,12 @@ function validate(){
     .forEach(([k,f])=>{ const bad=!f(); if(bad) errs.p3.push(k); if(tried) mark($(`[data-req="${k}"]`), bad); });
   // op
   if(!val("use")) errs.op.push("use"); if(tried) mark($('[data-req="use"]'), !val("use"));
+  // 追加ヒアリング（任意。何か書いた場合だけ、氏名と連絡先の組をそろえる）
+  const hn=txt("hr_name"), ha=txt("hr_aff"), he=txt("hr_email"), ht=txt("hr_tel");
+  const any = hn||ha||he||ht, emailBad = he && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(he);
+  const nameBad = any && !hn, contactBad = any && !he && !ht;
+  if(nameBad) errs.hr.push("name"); if(emailBad) errs.hr.push("email"); if(contactBad) errs.hr.push("tel");
+  if(tried){ mark($('[data-req="hr_name"]'), !!nameBad); mark($('[data-req="hr_email"]'), !!emailBad); mark($('[data-req="hr_tel"]'), !!contactBad); }
   return errs;
 }
 function totalReq(){ return 1 + 3 + 3*PARTS.p1.req + 3*PARTS.p2.req + 7 + 1; }
@@ -540,8 +565,9 @@ function refreshStatus(){
   const done = val("consent")==="はい" ? Math.max(0,total-missingUnits) : 0;
   $("#count").innerHTML = `必須項目 <b>${done}</b> / ${total}`;
   $$("#steps button").forEach(a=>{ const s=a.dataset.s; const ok = errs[s].length===0 && (s!=="consent" || val("consent")==="はい");
-    a.classList.toggle("done", ok && val("consent")==="はい"); a.classList.toggle("bad", tried && !ok); });
-  if(tried){ $("#errsum").textContent = n ? `未入力の必須項目があります（赤く表示されている箇所）。` : ""; }
+    const filled = s!=="hr" || txt("hr_name")||txt("hr_aff")||txt("hr_email")||txt("hr_tel");
+    a.classList.toggle("done", ok && filled && val("consent")==="はい"); a.classList.toggle("bad", tried && !ok); });
+  if(tried){ $("#errsum").textContent = n ? `未入力・要確認の項目があります（赤く表示されている箇所）。` : ""; }
   return errs;
 }
 
@@ -593,7 +619,7 @@ function show(view){
 $("#f").addEventListener("submit", e=>{
   e.preventDefault(); tried = true;
   const errs = refreshStatus();
-  const order = ["consent","basic","p1","p2","p3","op"];
+  const order = ["consent","basic","p1","p2","p3","op","hr"];
   const first = order.find(s=>errs[s].length);
   if(first){
     const target = $("#s-"+first+" .has-err") || $("#s-"+first);
@@ -605,7 +631,7 @@ $("#f").addEventListener("submit", e=>{
 });
 
 /* ---------- send ---------- */
-const API_URL = "https://script.google.com/macros/s/AKfycbzF6Q1ZRMwSYjo8KfM6OIZ6xHJrHREUHWfX3wfoWtdwcDRei2T1kDdZ18QwujzTvU0vbA/exec";   // 画面をGoogleの外に置く場合、Apps ScriptのウェブアプリURL（…/exec）をここに入れる
+const API_URL = "https://script.google.com/macros/s/AKfycbzWNVLjTpPfqFYdHj9PPb_0ZyzlwF6owR-GifYfCgNQVFzxpkFGY3jpYu1zMXuTJi8G/exec";   // 画面をGoogleの外に置く場合、Apps ScriptのウェブアプリURL（…/exec）をここに入れる
 const IS_GAS = typeof google!=="undefined" && google.script && google.script.run;
 const LIVE = IS_GAS || !!API_URL;
 let sending = false;
@@ -651,7 +677,7 @@ let spyRAF = 0;
 window.addEventListener("scroll", ()=>{ if(spyRAF) return; spyRAF = requestAnimationFrame(()=>{ spyRAF = 0;
   const line = $("#bar").offsetHeight + 40; let cur = "consent";
   $$("section.part").forEach(sec=>{ if(!sec.closest("[hidden]") && sec.getBoundingClientRect().top <= line) cur = sec.dataset.s; });
-  if(val("consent")==="はい" && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = "op";
+  if(val("consent")==="はい" && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = "hr";
   $$("#steps button").forEach(b=>b.classList.toggle("cur", b.dataset.s===cur));
 });}, {passive:true});
 
