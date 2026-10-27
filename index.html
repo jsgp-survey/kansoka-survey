@@ -170,21 +170,6 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
 .hint{font-size:13px;color:var(--muted);text-align:center}
 .errsum{color:var(--warn);font-weight:700;font-size:14px;text-align:center}
 
-/* review */
-.review dl{margin:0;display:grid;grid-template-columns:11rem minmax(0,1fr);gap:0;border:1px solid var(--rule);border-radius:4px;overflow:hidden;font-size:14.5px}
-.review dt,.review dd{margin:0;padding:8px 12px;border-top:1px solid var(--rule-soft)}
-.review dt{background:var(--accent-soft);font-weight:700}
-.review dd{white-space:pre-wrap;overflow-wrap:anywhere}
-.review dt:first-of-type,.review dd:first-of-type{border-top:0}
-.review h3{font-family:var(--f-display);font-size:17px;margin:26px 0 8px}
-.rv-case{border:1px solid var(--rule);border-radius:4px;padding:10px 12px;margin-top:8px;font-size:14.5px;display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:2px 8px}
-.rv-case .n{font-weight:700;grid-row:span 3;color:var(--accent)}
-.rv-case div{overflow-wrap:anywhere}
-.rv-case em{font-style:normal;color:var(--muted);font-size:12.5px;margin-right:6px}
-.done-box{text-align:center;padding:30px 0 10px}
-.done-box h2{font-family:var(--f-display);font-size:24px;margin:0 0 8px}
-.demo-note{margin-top:18px;font-size:13px;color:var(--muted);background:var(--field);border:1px dashed var(--rule);padding:10px 14px;border-radius:4px;text-align:left}
-
 /* phone */
 @media (max-width:760px){
   .g-head{display:none}
@@ -205,9 +190,6 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
 
   .kv-row{grid-template-columns:1fr}
   .kv-row > .k{padding:8px 12px}
-  .review dl{grid-template-columns:1fr}
-  .review dt{border-top:1px solid var(--rule)}
-  .review dd{border-top:0}
   .g-ex .c-no::before{content:""}
 }
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
@@ -373,22 +355,11 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
 
   <div class="actions">
     <div class="errsum" id="errsum" aria-live="assertive"></div>
-    <button type="submit" class="btn primary" id="toReview">回答内容を確認する</button>
-    <div class="hint">次の画面で内容を確認してから送信します。入力途中の内容はこの端末に自動保存されます。</div>
+    <button type="submit" class="btn primary" id="sendBtn">送信する</button>
+    <div class="hint">送信後は修正・撤回できません。入力途中の内容はこの端末に自動保存されます。</div>
   </div>
   </div>
   </form>
- </div>
-
- <div id="reviewView" class="review" hidden>
-  <h1>回答内容の確認</h1>
-  <p class="sub">内容をご確認のうえ、「この内容で送信する」を押してください。送信後は修正・撤回できません。</p>
-  <div id="reviewBody"></div>
-  <div class="actions">
-    <div class="errsum" id="sendErr" aria-live="assertive"></div>
-    <button type="button" class="btn primary" id="send">この内容で送信する</button>
-    <button type="button" class="btn ghost" id="back">入力画面に戻って修正する</button>
-  </div>
  </div>
 
  <div id="doneView" hidden>
@@ -613,25 +584,9 @@ function onChange(){ syncOthers(); refreshStatus(); save(); }
 $("#f").addEventListener("input", onChange);
 $("#f").addEventListener("change", onChange);
 
-/* ---------- review ---------- */
-const esc = s => String(s??"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const rtxt = d => d.reasons.map(k=>REASONS[k-1]).join("、") + (d.other?`（${d.other}）`:"");
-function caseHTML(list){
-  if(!list.length) return `<p class="sub">記入なし</p>`;
-  return list.map(d=>`<div class="rv-case"><span class="n">例${d.no}</span>
-    <div><em>変更前</em>${esc(d.before)}</div><div><em>変更後</em>${esc(d.after)}</div><div><em>理由</em>${esc(rtxt(d))}</div></div>`).join("");
-}
-function renderReview(x){
-  const dl = rows => `<dl>${rows.map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)||"—"}</dd>`).join("")}</dl>`;
-  $("#reviewBody").innerHTML =
-    `<h3>基本情報</h3>` + dl([["Q1 施設種別", x.q1 + (x.q1_other?`（${x.q1_other}）`:"")],["Q2 認定薬剤師の取得歴",x.q2],["Q3 会員種別", x.q3 + (x.q3_other?`（${x.q3_other}）`:"")]]) +
-    `<h3>第1部　多く経験した事例（${x.p1.length}例）</h3>` + caseHTML(x.p1) +
-    `<h3>第2部　参考になると思う事例（${x.p2.length}例）</h3>` + caseHTML(x.p2) +
-    `<h3>第3部　症例</h3>` + dl([["患者の年代",x.p3.age],["患者の性別",x.p3.sex],["介護度",x.p3.care],["背景",x.p3.background],["変更前の処方",x.p3.rx_before],["変更後の処方",x.p3.rx_after],["簡素化のポイント・提案理由",x.p3.point]]) +
-    `<h3>ご意見・ご要望</h3>` + dl([["リストの活用意向",x.use],["自由記述",x.comment]]);
-}
+/* ---------- views ---------- */
 function show(view){
-  $("#formView").hidden = view!=="form"; $("#reviewView").hidden = view!=="review"; $("#doneView").hidden = view!=="done";
+  $("#formView").hidden = view!=="form"; $("#doneView").hidden = view!=="done";
   $("#steps").hidden = view!=="form"; $("#count").hidden = view!=="form";
   window.scrollTo({top:0, behavior:"auto"});
 }
@@ -646,16 +601,18 @@ $("#f").addEventListener("submit", e=>{
     const f = $("textarea:not([hidden]), input:not([type=hidden]):not([hidden])", target); if(f) f.focus({preventScroll:true});
     return;
   }
-  renderReview(collect()); show("review");
+  sendNow();
 });
-$("#back").addEventListener("click", ()=>show("form"));
 
 /* ---------- send ---------- */
 const API_URL = "https://script.google.com/macros/s/AKfycbwG0RNN5uareGplviGhBDaN-sism0q4eZUYOCIR8dmcezFgk5CRoLf2n4nH11nTZcNneg/exec";   // 画面をGoogleの外に置く場合、Apps ScriptのウェブアプリURL（…/exec）をここに入れる
 const IS_GAS = typeof google!=="undefined" && google.script && google.script.run;
 const LIVE = IS_GAS || !!API_URL;
-$("#send").addEventListener("click", ()=>{
-  const btn = $("#send"); btn.disabled = true; btn.textContent = "送信しています…"; $("#sendErr").textContent = "";
+let sending = false;
+function sendNow(){
+  if(sending) return;
+  sending = true;
+  const btn = $("#sendBtn"); btn.disabled = true; btn.textContent = "送信しています…"; $("#errsum").textContent = "";
   const payload = collect();
   const ok = (res)=>{
     try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
@@ -663,8 +620,8 @@ $("#send").addEventListener("click", ()=>{
     if(!LIVE){ const n=$("#demoNote"); n.hidden=false;
       n.innerHTML = "<b>プレビュー版のため、回答は送信されていません。</b>本番版（Google Apps Script）では、この時点でGoogleスプレッドシートに1行追加されます。"; }
   };
-  const ng = (err)=>{ btn.disabled=false; btn.textContent="この内容で送信する";
-    $("#sendErr").textContent = "送信できませんでした。通信状況をご確認のうえ、もう一度「この内容で送信する」を押してください。" + (err && err.message ? `（${err.message}）` : ""); };
+  const ng = (err)=>{ sending = false; btn.disabled=false; btn.textContent="送信する";
+    $("#errsum").textContent = "送信できませんでした。通信状況をご確認のうえ、もう一度「送信する」を押してください。入力内容は残っています。" + (err && err.message ? `（${err.message}）` : ""); };
   if(IS_GAS){ google.script.run.withSuccessHandler(ok).withFailureHandler(ng).submitResponse(payload); }
   else if(API_URL){
     // Content-Type を text/plain にすると事前確認（preflight）が不要になり、Apps Scriptへ直接送れる
@@ -674,7 +631,7 @@ $("#send").addEventListener("click", ()=>{
       .catch(ng);
   }
   else setTimeout(()=>ok({demo:true}), 600);
-});
+}
 
 /* ---------- section tabs (scroll inside the page; no links) ---------- */
 function goSection(sec){
