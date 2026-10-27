@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>服薬簡素化に関するアンケート調査</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=BIZ+UDPMincho:wght@700&display=swap">
+<style>
+/* Layout: one paper "sheet" like the Word questionnaire; cases entered in ruled grid rows, which fold into cards on phones */
+:root{
+  --paper:#EEF2F1; --sheet:#FFFFFF; --ink:#1B2B30; --muted:#5A6A6E; --rule:#C9D3D2; --rule-soft:#E2E8E7;
+  --accent:#1E6A73; --accent-ink:#FFFFFF; --accent-soft:#E2EFEF; --warn:#B0412A; --warn-soft:#FBEDEA; --ok:#2C7548;
+  --field:#FBFCFC; --example:#7C8A8D;
+  --f-display:"BIZ UDPMincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"BIZ UDPGothic","Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0F1617; --sheet:#172123; --ink:#E3EBEB; --muted:#9BAAAD; --rule:#33444A; --rule-soft:#243136;
+  --accent:#62B4BC; --accent-ink:#0D1A1C; --accent-soft:#1B3236; --warn:#E8806A; --warn-soft:#3A221D; --ok:#6CC08C;
+  --field:#1B272A; --example:#7F9094; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#0F1617; --sheet:#172123; --ink:#E3EBEB; --muted:#9BAAAD; --rule:#33444A; --rule-soft:#243136;
+  --accent:#62B4BC; --accent-ink:#0D1A1C; --accent-soft:#1B3236; --warn:#E8806A; --warn-soft:#3A221D; --ok:#6CC08C;
+  --field:#1B272A; --example:#7F9094; color-scheme:dark }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+.case textarea{min-height:6.4em}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.7;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--sheet)}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--sheet);border-bottom:1px solid var(--rule);
+  margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+  padding:10px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.bar-in{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.bar-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.bar-title{font-weight:700;font-size:15px;flex:1 1 auto;min-width:0}
+.save{font-size:12px;color:var(--muted)}
+.count{font-size:13px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.count b{color:var(--ink)}
+.steps{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-bottom:-1px}
+.steps button{flex:1 0 auto;text-align:center;font:inherit;font-size:12.5px;color:var(--muted);background:none;border:0;border-bottom:3px solid var(--rule-soft);padding:6px 10px 8px;white-space:nowrap;cursor:pointer}
+.steps button:hover{color:var(--ink)}
+.steps button.done{color:var(--ok);border-bottom-color:var(--ok)}
+.steps button.done::before{content:"✓ "}
+.steps button.bad{color:var(--warn);border-bottom-color:var(--warn)}
+.steps button.cur{font-weight:700;color:var(--ink);background:var(--accent-soft)}
+.steps button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%,40%{background:var(--warn-soft)}100%{background:transparent}}
+
+.sheet{max-width:960px;margin:24px auto 0;background:var(--sheet);border:1px solid var(--rule);border-radius:4px;padding:clamp(20px,4vw,48px)}
+h1{font-family:var(--f-display);font-size:clamp(22px,3.4vw,30px);line-height:1.4;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0}
+.meta{display:flex;flex-wrap:wrap;gap:6px 20px;margin:18px 0 0;font-size:14px}
+.meta span b{font-weight:700}
+.restore{margin-top:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:14px;background:var(--accent-soft);padding:10px 14px;border-radius:4px}
+
+section.part{margin-top:44px;scroll-margin-top:110px}
+section.part[hidden]{display:none}
+.part-head{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:6px;flex-wrap:wrap}
+.part-head h2{font-family:var(--f-display);font-size:21px;margin:0;line-height:1.4;text-wrap:balance}
+.part-head .tag{font-size:13px;color:var(--muted)}
+.lead{margin:12px 0 0;max-width:70ch}
+.req{color:var(--warn);font-weight:700}
+.reqtag{display:inline-block;font-size:11px;font-weight:700;color:var(--warn);border:1px solid currentColor;border-radius:3px;padding:0 4px;line-height:1.5;vertical-align:2px;margin-left:4px}
+.opttag{display:inline-block;font-size:11px;color:var(--muted);border:1px solid var(--rule);border-radius:3px;padding:0 4px;line-height:1.5;vertical-align:2px;margin-left:4px}
+
+/* consent */
+.ethics{margin-top:14px;border:1px solid var(--rule);border-radius:4px;max-height:340px;overflow-y:auto;padding:16px 20px;font-size:14px;background:var(--field)}
+.ethics h3{font-size:14px;margin:14px 0 2px}
+.ethics h3:first-child{margin-top:0}
+.ethics p{margin:0}
+.ethics ul{margin:0;padding-left:1.2em}
+
+/* questions */
+.q{margin-top:22px}
+.q-label{font-weight:700;display:block}
+.q-num{color:var(--accent);margin-right:6px;font-variant-numeric:tabular-nums}
+.choices{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.choice{position:relative}
+.choice input{position:absolute;opacity:0;width:1px;height:1px}
+.choice span{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rule);border-radius:999px;padding:6px 14px;cursor:pointer;background:var(--field);font-size:15px;user-select:none}
+.choice span::before{content:"";width:14px;height:14px;border:1.5px solid var(--muted);border-radius:50%;flex:none}
+.choice input[type=checkbox]+span::before{border-radius:3px}
+.choice input:checked+span{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.choice input:checked+span::before{background:var(--accent);border-color:var(--accent);box-shadow:inset 0 0 0 2.5px var(--field)}
+.choice input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.other-in{margin-top:8px;max-width:360px}
+
+input[type=text],textarea{width:100%;font:inherit;font-size:15px;color:var(--ink);background:var(--field);border:1px solid var(--rule);border-radius:3px;padding:7px 10px;line-height:1.6}
+textarea{resize:vertical;min-height:2.9em;overflow:hidden}
+textarea.tall{min-height:7.5em}
+input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:var(--accent)}
+::placeholder{color:var(--example);opacity:1}
+
+.invalid textarea:invalid, .invalid .err-field{border-color:var(--warn);background:var(--warn-soft)}
+.errmsg{display:none;color:var(--warn);font-size:13px;margin-top:4px;font-weight:700}
+.has-err > .errmsg, .has-err .errmsg.own{display:block}
+.has-err .choices .choice span{border-color:var(--warn)}
+.has-err > textarea, .has-err > input[type=text], textarea.e, input.e{border-color:var(--warn)!important;background:var(--warn-soft)!important}
+
+/* legend */
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:12px;font-size:14px;padding:8px 12px;background:var(--accent-soft);border-radius:4px}
+
+/* case grid */
+.grid{margin-top:14px;border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.g-row{display:grid;grid-template-columns:3.2rem minmax(0,1fr) minmax(0,1fr) repeat(5,4.4rem);border-top:1px solid var(--rule)}
+.g-row:first-child{border-top:0}
+.g-row > div{padding:8px 10px;min-width:0}
+.g-row > div + div{border-left:1px solid var(--rule-soft)}
+.g-head{background:var(--accent-soft);font-size:13px;font-weight:700}
+.g-head > div{padding:8px 10px}
+.g-ex{color:var(--example);font-size:14px;background:var(--field)}
+.g-ex .c-no{font-size:12px}
+.c-no{font-weight:700;font-variant-numeric:tabular-nums;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;padding-top:12px!important}
+.c-no small{font-size:10.5px;font-weight:700;color:var(--warn)}
+.c-no small.opt{color:var(--muted);font-weight:400}
+.m-label{display:none}
+.copy{margin-top:4px;font:inherit;font-size:12.5px;color:var(--accent);background:none;border:0;padding:2px 0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.copy:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* reason: check mode (five check columns) */
+.c-rs{display:contents}
+.rs{display:flex;align-items:center;justify-content:center;cursor:pointer;border-left:1px solid var(--rule-soft);padding:8px 4px}
+.rs .rs-n, .rs .rs-t{display:none}
+.rs input{width:22px;height:22px;accent-color:var(--accent);margin:0;flex:none;cursor:pointer}
+.rs:has(input:checked){background:var(--accent-soft)}
+.rs:hover{background:var(--accent-soft)}
+.h-check{font-size:11.5px!important;line-height:1.35;text-align:center;padding:6px 3px!important;font-weight:700}
+.h-check b{display:block;font-size:15px}
+.ex-check{text-align:center;font-size:16px}
+.c-other{grid-column:1/-1;padding:0 10px 10px 3.8rem!important;border-left:0!important;display:flex;align-items:center;gap:8px;font-size:13px}
+.c-other label{white-space:nowrap;color:var(--muted);font-weight:700}
+.c-other input{max-width:420px;font-size:14px!important;padding:5px 8px!important}
+
+.g-row.has-err{background:var(--warn-soft)}
+.g-row .errmsg{grid-column:1/-1;padding:0 10px 8px;border:0!important}
+.g-row.has-err .errmsg{display:block}
+.g-row.dim .c-no{color:var(--muted)}
+.add{margin-top:10px;font:inherit;font-size:15px;font-weight:700;color:var(--accent);background:var(--sheet);border:1.5px dashed var(--accent);border-radius:4px;padding:10px 16px;cursor:pointer;width:100%}
+.add:hover{background:var(--accent-soft)}
+.add:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* part 3 two-column table */
+.kv{margin-top:14px;border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.kv-row{display:grid;grid-template-columns:12rem minmax(0,1fr);border-top:1px solid var(--rule)}
+.kv-row:first-child{border-top:0}
+.kv-row > .k{background:var(--accent-soft);font-weight:700;font-size:14px;padding:12px}
+.kv-row > .k small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.kv-row > .v{padding:10px 12px;min-width:0}
+.kv-row .choices{margin-top:0}
+.kv-row.has-err > .v{background:var(--warn-soft)}
+.note{font-size:13px;color:var(--warn);margin-top:10px}
+
+/* actions */
+.actions{margin-top:40px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid var(--rule);padding-top:28px}
+.btn{font:inherit;font-size:16px;font-weight:700;border-radius:4px;padding:12px 28px;cursor:pointer;border:1.5px solid var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:disabled{opacity:.55;cursor:progress}
+.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.hint{font-size:13px;color:var(--muted);text-align:center}
+.errsum{color:var(--warn);font-weight:700;font-size:14px;text-align:center}
+
+/* review */
+.review dl{margin:0;display:grid;grid-template-columns:11rem minmax(0,1fr);gap:0;border:1px solid var(--rule);border-radius:4px;overflow:hidden;font-size:14.5px}
+.review dt,.review dd{margin:0;padding:8px 12px;border-top:1px solid var(--rule-soft)}
+.review dt{background:var(--accent-soft);font-weight:700}
+.review dd{white-space:pre-wrap;overflow-wrap:anywhere}
+.review dt:first-of-type,.review dd:first-of-type{border-top:0}
+.review h3{font-family:var(--f-display);font-size:17px;margin:26px 0 8px}
+.rv-case{border:1px solid var(--rule);border-radius:4px;padding:10px 12px;margin-top:8px;font-size:14.5px;display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:2px 8px}
+.rv-case .n{font-weight:700;grid-row:span 3;color:var(--accent)}
+.rv-case div{overflow-wrap:anywhere}
+.rv-case em{font-style:normal;color:var(--muted);font-size:12.5px;margin-right:6px}
+.done-box{text-align:center;padding:30px 0 10px}
+.done-box h2{font-family:var(--f-display);font-size:24px;margin:0 0 8px}
+.demo-note{margin-top:18px;font-size:13px;color:var(--muted);background:var(--field);border:1px dashed var(--rule);padding:10px 14px;border-radius:4px;text-align:left}
+
+/* phone */
+@media (max-width:760px){
+  .g-head{display:none}
+  .g-row{grid-template-columns:1fr;padding:6px 0}
+  .case textarea{min-height:2.9em}
+  .g-row > div + div{border-left:0}
+  .g-row > div{padding:6px 12px}
+  .c-no{flex-direction:row;justify-content:flex-start;gap:8px;padding-top:8px!important;font-size:15px}
+  .c-no::before{content:"例"}
+  .m-label{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:2px}
+  .g-row{grid-template-columns:1fr}
+  .c-rs{display:flex;flex-wrap:wrap;gap:6px;padding:6px 12px}
+  .c-rs::before{content:"簡素化の理由（当てはまるものすべてにチェック）";display:block;width:100%;font-size:12.5px;font-weight:700;color:var(--muted)}
+  .rs{border:1px solid var(--rule);border-radius:999px;padding:5px 12px;gap:6px;justify-content:flex-start;font-size:14px}
+  .rs .rs-n, .rs .rs-t{display:inline}
+  .rs input{width:18px;height:18px}
+  .c-other{padding:0 12px 8px!important;flex-wrap:wrap}
+
+  .kv-row{grid-template-columns:1fr}
+  .kv-row > .k{padding:8px 12px}
+  .review dl{grid-template-columns:1fr}
+  .review dt{border-top:1px solid var(--rule)}
+  .review dd{border-top:0}
+  .g-ex .c-no::before{content:""}
+}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+</head>
+<body>
+
+
+<header class="bar" id="bar">
+  <div class="bar-in">
+    <div class="bar-top">
+      <div class="bar-title">服薬簡素化に関するアンケート調査</div>
+      <span class="count" id="count"></span>
+      <span class="save" id="save" aria-live="polite"></span>
+    </div>
+    <nav class="steps" id="steps" aria-label="セクション">
+      <button type="button" data-s="consent">同意</button>
+      <button type="button" data-s="basic">基本情報</button>
+      <button type="button" data-s="p1">第1部</button>
+      <button type="button" data-s="p2">第2部</button>
+      <button type="button" data-s="p3">第3部</button>
+      <button type="button" data-s="op">ご意見</button>
+    </nav>
+  </div>
+</header>
+
+<main class="sheet" id="sheet">
+ <div id="formView">
+  <h1>服薬簡素化に関するアンケート調査</h1>
+  <p class="sub">服薬簡素化該当薬剤リスト作成のための実態調査</p>
+  <div class="meta">
+    <span><b>所要時間</b>　約15分</span>
+    <span><b>回答期限</b>　2026年12月31日（木）</span>
+    <span><b>対象</b>　日本老年薬学会 会員</span>
+  </div>
+  <div class="restore" id="restore" hidden>
+    <span>前回の入力途中の内容を復元しました。</span>
+    <button type="button" class="copy" id="clearDraft">消去して最初から入力する</button>
+  </div>
+
+  <form id="f" novalidate autocomplete="off">
+
+  <!-- 同意 -->
+  <section class="part" id="s-consent" data-s="consent">
+    <div class="part-head"><h2>研究へのご協力のお願い</h2></div>
+    <p class="lead">本調査は、日本老年薬学会会員の先生方を対象に、臨床で経験された服薬簡素化の事例を収集し、服薬簡素化に該当する薬剤の実態を明らかにすることを目的としています。参加は任意であり、回答しないことによる不利益は一切ありません。回収したデータは統計的に処理し、個人が特定される形での公表は行いません。</p>
+    <div class="ethics" tabindex="0" aria-label="研究についての説明">
+      <h3>1. 研究の名称及び当該研究の実施について研究機関の長の許可を受けている旨</h3>
+      <p>研究課題名：「日本老年薬学会会員を対象とした服薬簡素化の実態に関するアンケート調査」本研究課題については、AMG医療法人社団哺育会 桜ヶ丘中央病院 倫理審査委員会による倫理審査を経て、●●の実施許可を受けております。</p>
+      <h3>2. 研究機関の名称及び責任者</h3>
+      <p>日本老年薬学会 服薬簡素化活性化ワーキンググループ<br>研究責任者（代表）丸岡 弘治（介護老人保健施設横浜あおばの里）<br>研究分担者　秋下 雅弘（東京都健康長寿医療センター）、新井 克明（大洗海岸病院）、黄倉 崇（帝京大学）、大河内 二郎（介護老人保健施設竜間之郷）、倉田 なおみ（昭和医科大学）、糀屋 絵理子（大阪大学）、竹屋 泰（大阪大学大学院）、篠永 浩（三豊総合病院）、早乙女 彩子（のぞみ薬局）、浜田 将太（東京薬科大学）、東原 和美（バプテスト老人保健施設）、溝神 文博（国立長寿医療研究センター）</p>
+      <h3>3. 研究の目的及び意義</h3>
+      <p>本研究は、日本老年薬学会会員の臨床経験に基づき、服薬簡素化（服用時点の統一、回数削減、他剤同効薬への変更、持続性製剤への変更など）に該当する薬剤の実態を把握し、「服薬簡素化該当薬剤リスト」の作成に資する基礎データを得ることを目的とします。本研究の成果は、薬剤師をはじめとする医療者が処方提案を行う際の実践的な資料として活用されることが期待されます。</p>
+      <h3>4. 研究の方法及び期間</h3>
+      <p>1) 研究デザイン：質問票を用いた研究（個人を特定できないようにしたアンケート調査）<br>2) 方法：日本老年薬学会の会員向けメーリングリスト等を活用し、協力者を募ります。<br>3) データ収集：インターネット経由でデータを入力し、研究責任者の所属施設（介護老人保健施設横浜あおばの里）にて集計を行います。<br>4) 調査項目：基本情報（施設種別、老年薬学認定薬剤師の取得歴、会員種別）／服薬簡素化の事例（変更前後の処方、簡素化の理由）および参考となる症例1例／服薬簡素化リストの活用意向、ご意見・ご要望<br>5) 収集したデータの流れ：研究責任者にてアンケートデータを収集・解析を行い、加工前のデータは他施設と共有しません。<br>研究期間：倫理委員会承認日〜2026年10月19日<br>アンケート調査期間：2026年10月27日（火）〜 2026年12月31日（木）</p>
+      <h3>5. 研究対象者として選定された理由</h3>
+      <p>同意を得られた、日本老年薬学会の会員で高齢者に対する服薬支援の臨床経験を有する方が対象となります。</p>
+      <h3>6. 研究対象者に生じる負担並びに予測されるリスク及び利益</h3>
+      <p>本研究はアンケート調査を用いた研究であり、研究対象者に対して介入を伴うことがないため、不利益は生じません。ただし、回答時間（15分程度）を要します。回答の際の通信料は回答者のご負担になることをご了承ください。また、回答者への直接的な利益はありません。</p>
+      <h3>7. 同意を撤回できる旨</h3>
+      <p>本研究は無記名でのアンケート調査のため、提出（送信）後の同意撤回はできません。なお、アンケート調査に同意しないことによって研究対象者等が不利益を被ることはありません。</p>
+      <h3>8. 研究に関する情報公開の方法</h3>
+      <p>研究結果の公開については、学会発表・論文投稿などにて行う予定でおります。</p>
+      <h3>9. 研究計画書及び研究の方法に関する資料の入手又は閲覧</h3>
+      <p>他の研究対象者等の個人情報等の保護および本研究の独創性の確保に支障がない範囲内で、研究計画書および研究の方法に関する資料を閲覧することができます。閲覧を希望される場合には、下記のお問い合わせ先にご連絡ください。</p>
+      <h3>10. 個人情報等の取扱い</h3>
+      <p>氏名・所属施設名・メールアドレス等の個人を特定し得る情報は収集しません。電子データは、研究責任者が管理するアカウント上でパスワードにより厳重に保管されます。研究成果の発表の際にも回答者を特定できるような内容を含むことはございません。<br>※ 第3部の症例には、患者を特定できる情報（氏名・イニシャル・生年月日・患者ID・施設名等）を記入しないでください。</p>
+      <h3>11. 試料・情報の保管及び廃棄の方法</h3>
+      <p>WEBでの無記名アンケート調査のため、紙媒体の情報は取り扱っておりません。本研究のデータは研究終了後5年間保管し、規則に沿って適切に廃棄します。</p>
+      <h3>12. 利益相反</h3>
+      <p>本研究の資金源：なし。本研究に関する研究全体及び研究者個人として申告すべき利益相反状態はありません。</p>
+      <h3>13. 研究により得られた結果等の取扱い</h3>
+      <p>本研究から得られた成果は、研究対象者の方には個別に通知しません。研究成果は国内外の学会や学術雑誌などに発表されることがあります。</p>
+      <h3>14. お問い合わせ先</h3>
+      <p>介護老人保健施設横浜あおばの里　薬剤師　丸岡 弘治<br>電話番号：045-978-5310（代表）　受付時間：9:00–17:00<br>メールアドレス：fukuyakukansoka@jsgp.or.jp</p>
+    </div>
+    <div class="q" data-req="consent">
+      <span class="q-label">上記内容を理解した上で、本研究に参加いただけますか。<span class="reqtag">必須</span></span>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="consent" id="consent_yes" value="はい"><span>はい（回答へ進む）</span></label>
+        <label class="choice"><input type="radio" name="consent" id="consent_no" value="いいえ"><span>いいえ（回答終了）</span></label>
+      </div>
+      <div class="errmsg">どちらかを選択してください。</div>
+    </div>
+    <p class="lead" id="declined" hidden><b>ご確認いただきありがとうございました。</b>このページを閉じて終了してください。</p>
+  </section>
+
+  <div id="body" hidden>
+  <!-- 基本情報 -->
+  <section class="part" id="s-basic" data-s="basic">
+    <div class="part-head"><h2>基本情報</h2></div>
+    <div class="q" data-req="q1">
+      <span class="q-label"><span class="q-num">Q1</span>ご所属の施設種別<span class="reqtag">必須</span></span>
+      <div class="choices" id="q1c"></div>
+      <input type="text" class="other-in" id="q1_other" placeholder="その他の施設種別" hidden>
+      <div class="errmsg">施設種別を選択してください（「その他」の場合は内容も記入）。</div>
+    </div>
+    <div class="q" data-req="q2">
+      <span class="q-label"><span class="q-num">Q2</span>これまでの老年薬学認定薬剤師の取得歴の有無<span class="reqtag">必須</span></span>
+      <div class="choices" id="q2c"></div>
+      <div class="errmsg">どちらかを選択してください。</div>
+    </div>
+    <div class="q" data-req="q3">
+      <span class="q-label"><span class="q-num">Q3</span>日本老年薬学会の会員種別<span class="reqtag">必須</span></span>
+      <div class="choices" id="q3c"></div>
+      <input type="text" class="other-in" id="q3_other" placeholder="その他の会員種別" hidden>
+      <div class="errmsg">会員種別を選択してください（「その他」の場合は内容も記入）。</div>
+    </div>
+  </section>
+
+  <!-- 第1部 -->
+  <section class="part" id="s-p1" data-s="p1">
+    <div class="part-head"><h2>第1部　多く経験した服薬簡素化の事例</h2><span class="tag">最大10例</span></div>
+    <p class="lead">臨床で多く経験した服薬簡素化の事例をご記入ください。<b>例1〜3は必須</b>、例4〜10は任意です。簡素化の理由は、当てはまる番号の欄すべてにチェックしてください。</p>
+    <div class="legend" aria-hidden="true"><span>① 服用時点の統一</span><span>② 回数削減</span><span>③ 他剤同効薬への変更</span><span>④ 持続性製剤への変更</span><span>⑤ その他</span></div>
+    <div class="grid" id="p1grid"></div>
+    <button type="button" class="add" id="p1add"></button>
+  </section>
+
+  <!-- 第2部 -->
+  <section class="part" id="s-p2" data-s="p2">
+    <div class="part-head"><h2>第2部　多くはないが参考になると思う事例</h2><span class="tag">最大3例</span></div>
+    <p class="lead">頻度は多くないものの、参考になると思った事例をご記入ください。<b>例1は必須</b>、例2〜3は任意です。</p>
+    <div class="grid" id="p2grid"></div>
+    <button type="button" class="add" id="p2add"></button>
+  </section>
+
+  <!-- 第3部 -->
+  <section class="part" id="s-p3" data-s="p3">
+    <div class="part-head"><h2>第3部　参考になると思う服薬簡素化の症例</h2><span class="tag">1例・全項目必須</span></div>
+    <p class="lead">服薬簡素化の具体的な症例を1例ご記入ください。処方全体の変更前後が分かるようにご記入ください。</p>
+    <div class="kv">
+      <div class="kv-row" data-req="age"><div class="k">患者の年代 <span class="req">*</span></div><div class="v"><div class="choices" id="agec"></div><div class="errmsg own">選択してください。</div></div></div>
+      <div class="kv-row" data-req="sex"><div class="k">患者の性別 <span class="req">*</span></div><div class="v"><div class="choices" id="sexc"></div><div class="errmsg own">選択してください。</div></div></div>
+      <div class="kv-row" data-req="care"><div class="k">介護度 <span class="req">*</span></div><div class="v"><div class="choices" id="carec"></div><div class="errmsg own">選択してください。</div></div></div>
+      <div class="kv-row" data-req="bg"><div class="k">背景 <span class="req">*</span></div><div class="v"><textarea id="p3_bg" placeholder="例：認知機能低下により服薬コンプライアンスを上げたい事例"></textarea><div class="errmsg own">記入してください。</div></div></div>
+      <div class="kv-row" data-req="rxb"><div class="k">変更前の処方 <span class="req">*</span><small>全処方</small></div><div class="v"><textarea id="p3_rxb" class="tall" placeholder="薬剤名・用量・用法を1行ずつ記入&#10;例：アムロジピン錠5mg 1錠 1日1回 朝食後&#10;　　酸化マグネシウム錠330mg 3錠 1日3回 毎食後"></textarea><div class="errmsg own">記入してください。</div></div></div>
+      <div class="kv-row" data-req="rxa"><div class="k">変更後の処方 <span class="req">*</span><small>全処方＋簡素化内容</small></div><div class="v"><textarea id="p3_rxa" class="tall" placeholder="変更内容が分かるように記入&#10;例：酸化マグネシウム錠330mg 3錠 1日1回 朝食後　←回数削減"></textarea><button type="button" class="copy" id="p3copy">← 変更前の処方を写して編集する</button><div class="errmsg own">記入してください。</div></div></div>
+      <div class="kv-row" data-req="pt"><div class="k">簡素化のポイント・提案理由 <span class="req">*</span></div><div class="v"><textarea id="p3_pt"></textarea><div class="errmsg own">記入してください。</div></div></div>
+    </div>
+    <p class="note">※ 患者を特定できる情報（氏名・イニシャル・生年月日・患者ID・施設名等）は記入しないでください。</p>
+  </section>
+
+  <!-- ご意見 -->
+  <section class="part" id="s-op" data-s="op">
+    <div class="part-head"><h2>ご意見・ご要望</h2></div>
+    <div class="q" data-req="use">
+      <span class="q-label">服薬簡素化リストが完成した場合、活用したいと思いますか？<span class="reqtag">必須</span></span>
+      <div class="choices" id="usec"></div>
+      <div class="errmsg">選択してください。</div>
+    </div>
+    <div class="q">
+      <label class="q-label" for="comment">その他、服薬簡素化に関するご意見やご要望がありましたらご自由にお書きください。<span class="opttag">任意</span></label>
+      <textarea id="comment" class="tall" style="margin-top:8px"></textarea>
+    </div>
+  </section>
+
+  <div class="actions">
+    <div class="errsum" id="errsum" aria-live="assertive"></div>
+    <button type="submit" class="btn primary" id="toReview">回答内容を確認する</button>
+    <div class="hint">次の画面で内容を確認してから送信します。入力途中の内容はこの端末に自動保存されます。</div>
+  </div>
+  </div>
+  </form>
+ </div>
+
+ <div id="reviewView" class="review" hidden>
+  <h1>回答内容の確認</h1>
+  <p class="sub">内容をご確認のうえ、「この内容で送信する」を押してください。送信後は修正・撤回できません。</p>
+  <div id="reviewBody"></div>
+  <div class="actions">
+    <div class="errsum" id="sendErr" aria-live="assertive"></div>
+    <button type="button" class="btn primary" id="send">この内容で送信する</button>
+    <button type="button" class="btn ghost" id="back">入力画面に戻って修正する</button>
+  </div>
+ </div>
+
+ <div id="doneView" hidden>
+  <div class="done-box">
+    <h2>ご協力ありがとうございました</h2>
+    <p>回答を受け付けました。このページを閉じて終了してください。</p>
+    <div class="demo-note" id="demoNote" hidden></div>
+  </div>
+ </div>
+</main>
+
+<script>
+(function(){
+"use strict";
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const DRAFT_KEY = "fukuyaku-kansoka-2026-draft";
+const REASONS = ["① 服用時点の統一","② 回数削減","③ 他剤同効薬への変更","④ 持続性製剤への変更","⑤ その他"];
+const OPTS = {
+  q1: ["病院","保険薬局","介護老人保健施設","介護医療院","特別養護老人ホーム","その他"],
+  q2: ["有る","無い"],
+  q3: ["一般会員","支援会員","学生会員","賛助会員","その他"],
+  age:["60歳代","70歳代","80歳代","90歳代","100歳以上"],
+  sex:["男性","女性"],
+  care:["無","要支援1","要支援2","要介護1","要介護2","要介護3","要介護4"],
+  use:["ぜひ活用したい","あれば参考にする","あまり必要性を感じない","わからない"]
+};
+const PARTS = {
+  p1:{max:10, req:3, start:3, ex:{b:"ランソプラゾールOD錠15mg 1錠 1日1回 朝食後", a:"ランソプラゾールOD錠15mg 1錠 1日1回 夕食後", r:"①"}},
+  p2:{max:3, req:1, start:1, ex:{b:"アピキサバン錠2.5mg 2錠 1日2回 朝夕食後", a:"エドキサバン錠15mg 1錠 1日1回 朝食後", r:"③"}}
+};
+const shown = {p1:PARTS.p1.start, p2:PARTS.p2.start};
+let tried = false;
+
+/* ---------- build choices ---------- */
+function choices(key, mount){
+  const el = $(mount);
+  OPTS[key].forEach((v,i)=>{
+    const lab = document.createElement("label"); lab.className="choice";
+    lab.innerHTML = `<input type="radio" name="${key}" id="${key}_${i}" value="${v}"><span>${v}</span>`;
+    el.appendChild(lab);
+  });
+}
+choices("q1","#q1c"); choices("q2","#q2c"); choices("q3","#q3c");
+choices("age","#agec"); choices("sex","#sexc"); choices("care","#carec"); choices("use","#usec");
+
+/* ---------- build case grids ---------- */
+function buildGrid(p){
+  const cfg = PARTS[p], g = $("#"+p+"grid");
+  const exN = "①②③④⑤".indexOf(cfg.ex.r)+1;
+  g.innerHTML = `<div class="g-row g-head"><div>#</div><div>変更前（薬剤名・用量・用法）</div><div>変更後（薬剤名・用量・用法）</div>
+    ${REASONS.map(r=>`<div class="h-check"><b>${r[0]}</b>${r.slice(2)}</div>`).join("")}</div>
+  <div class="g-row g-ex" aria-hidden="true"><div class="c-no">記入例</div><div>${cfg.ex.b}</div><div>${cfg.ex.a}</div>
+    ${[1,2,3,4,5].map(k=>`<div class="ex-check">${k===exN?"✓":""}</div>`).join("")}</div>`;
+  for(let i=1;i<=cfg.max;i++){
+    const req = i<=cfg.req;
+    const row = document.createElement("div");
+    row.className = "g-row case"; row.dataset.part=p; row.dataset.i=i;
+    row.innerHTML = `
+      <div class="c-no">${i}${req?'<small>必須</small>':'<small class="opt">任意</small>'}</div>
+      <div><label class="m-label" for="${p}_${i}_b">変更前</label><textarea id="${p}_${i}_b" rows="2" aria-label="例${i} 変更前"></textarea></div>
+      <div><label class="m-label" for="${p}_${i}_a">変更後</label><textarea id="${p}_${i}_a" rows="2" aria-label="例${i} 変更後"></textarea>
+        <button type="button" class="copy" data-copy="${p}_${i}">← 変更前を写して編集</button></div>
+      <div class="c-rs">
+        ${REASONS.map((r,k)=>`<label class="rs" title="${r}"><input type="checkbox" id="${p}_${i}_r${k+1}" value="${k+1}" aria-label="例${i} ${r}"><span class="rs-n">${r[0]}</span><span class="rs-t">${r.slice(2)}</span></label>`).join("")}
+      </div>
+      <div class="c-other" hidden><label for="${p}_${i}_o">⑤ その他の内容（任意）</label><input type="text" id="${p}_${i}_o"></div>
+      <div class="errmsg"></div>`;
+    if(i>shown[p]) row.hidden = true;
+    g.appendChild(row);
+  }
+  updAdd(p);
+}
+function updAdd(p){
+  const b = $("#"+p+"add"), left = PARTS[p].max - shown[p];
+  b.hidden = left<=0;
+  b.textContent = `＋ 事例を追加する（あと${left}例まで）`;
+}
+function addRow(p, focus=true){
+  if(shown[p] >= PARTS[p].max) return;
+  shown[p]++;
+  const row = $(`.case[data-part="${p}"][data-i="${shown[p]}"]`);
+  row.hidden = false; updAdd(p);
+  if(focus) $("textarea",row).focus();
+}
+buildGrid("p1"); buildGrid("p2");
+$("#p1add").addEventListener("click",()=>{addRow("p1"); save();});
+$("#p2add").addEventListener("click",()=>{addRow("p2"); save();});
+
+/* ---------- behaviors ---------- */
+function grow(t){ t.style.height="auto"; t.style.height = (t.scrollHeight+2)+"px"; }
+document.addEventListener("input", e=>{ if(e.target.tagName==="TEXTAREA") grow(e.target); });
+
+document.addEventListener("click", e=>{
+  const c = e.target.closest("[data-copy]");
+  if(c){ const id=c.dataset.copy, b=$("#"+id+"_b"), a=$("#"+id+"_a");
+    if(b.value && !a.value){ a.value=b.value; grow(a); }
+    a.focus(); a.setSelectionRange(a.value.length,a.value.length); onChange(); }
+});
+$("#p3copy").addEventListener("click",()=>{ const b=$("#p3_rxb"), a=$("#p3_rxa");
+  if(b.value && !a.value){ a.value=b.value; grow(a); } a.focus(); onChange(); });
+
+function syncOthers(){
+  $("#q1_other").hidden = !$("#q1_5").checked;
+  $("#q3_other").hidden = !$("#q3_4").checked;
+  $$(".case").forEach(r=>{ const p=r.dataset.part,i=r.dataset.i; $(".c-other",r).hidden = !$(`#${p}_${i}_r5`).checked; });
+  const c = val("consent");
+  $("#body").hidden = c!=="はい";
+  $("#declined").hidden = c!=="いいえ";
+}
+
+/* ---------- read values ---------- */
+function val(name){ const x = $(`input[name="${name}"]:checked`); return x ? x.value : ""; }
+function txt(id){ const e=$("#"+id); return e ? e.value.trim() : ""; }
+function caseData(p,i){
+  const reasons = [1,2,3,4,5].filter(k=>$(`#${p}_${i}_r${k}`).checked);
+  return {no:i, before:txt(`${p}_${i}_b`), after:txt(`${p}_${i}_a`), reasons, other: reasons.includes(5)?txt(`${p}_${i}_o`):""};
+}
+function collect(){
+  const parts = {};
+  ["p1","p2"].forEach(p=>{
+    parts[p] = [];
+    for(let i=1;i<=PARTS[p].max;i++){ const d=caseData(p,i); if(d.before||d.after||d.reasons.length) parts[p].push(d); }
+  });
+  return {
+    consent: val("consent"),
+    q1: val("q1"), q1_other: val("q1")==="その他"?txt("q1_other"):"",
+    q2: val("q2"),
+    q3: val("q3"), q3_other: val("q3")==="その他"?txt("q3_other"):"",
+    p1: parts.p1, p2: parts.p2,
+    p3: {age:val("age"), sex:val("sex"), care:val("care"), background:txt("p3_bg"), rx_before:txt("p3_rxb"), rx_after:txt("p3_rxa"), point:txt("p3_pt")},
+    use: val("use"), comment: txt("comment")
+  };
+}
+
+/* ---------- validation ---------- */
+function validate(){
+  const errs = {consent:[],basic:[],p1:[],p2:[],p3:[],op:[]};
+  const mark = (el, bad, msg) => { el.classList.toggle("has-err", bad); if(msg!==undefined){ const m=$(".errmsg",el); if(m && bad) m.textContent=msg; } return bad; };
+  // consent
+  const c = val("consent");
+  mark($('[data-req="consent"]'), tried && !c);
+  if(c!=="はい"){ errs.consent.push(1); return errs; }
+  // basic
+  const q1bad = !val("q1") || (val("q1")==="その他" && !txt("q1_other"));
+  if(q1bad) errs.basic.push("q1"); if(tried) mark($('[data-req="q1"]'), q1bad);
+  if(!val("q2")) errs.basic.push("q2"); if(tried) mark($('[data-req="q2"]'), !val("q2"));
+  const q3bad = !val("q3") || (val("q3")==="その他" && !txt("q3_other"));
+  if(q3bad) errs.basic.push("q3"); if(tried) mark($('[data-req="q3"]'), q3bad);
+  // cases
+  ["p1","p2"].forEach(p=>{
+    for(let i=1;i<=PARTS[p].max;i++){
+      const row = $(`.case[data-part="${p}"][data-i="${i}"]`), d = caseData(p,i);
+      const req = i<=PARTS[p].req, any = d.before||d.after||d.reasons.length;
+      const miss = [];
+      if((req||any)){ if(!d.before) miss.push("変更前"); if(!d.after) miss.push("変更後"); if(!d.reasons.length) miss.push("簡素化の理由"); }
+      $(`#${p}_${i}_b`).classList.toggle("e", tried && miss.includes("変更前"));
+      $(`#${p}_${i}_a`).classList.toggle("e", tried && miss.includes("変更後"));
+      if(miss.length) errs[p].push(i);
+      if(tried) mark(row, miss.length>0, `例${i}：${miss.join("・")}を入力してください。`);
+    }
+  });
+  // p3
+  [["age",()=>val("age")],["sex",()=>val("sex")],["care",()=>val("care")],["bg",()=>txt("p3_bg")],["rxb",()=>txt("p3_rxb")],["rxa",()=>txt("p3_rxa")],["pt",()=>txt("p3_pt")]]
+    .forEach(([k,f])=>{ const bad=!f(); if(bad) errs.p3.push(k); if(tried) mark($(`[data-req="${k}"]`), bad); });
+  // op
+  if(!val("use")) errs.op.push("use"); if(tried) mark($('[data-req="use"]'), !val("use"));
+  return errs;
+}
+function totalReq(){ return 1 + 3 + 3*PARTS.p1.req + 3*PARTS.p2.req + 7 + 1; }
+function refreshStatus(){
+  const errs = validate();
+  const n = Object.values(errs).reduce((a,b)=>a+b.length,0);
+  // count required fields done (approximate by error units: case errors count missing pieces)
+  let missingUnits = errs.consent.length + errs.basic.length + errs.p3.length + errs.op.length;
+  ["p1","p2"].forEach(p=>errs[p].forEach(i=>{ const d=caseData(p,i); missingUnits += (!d.before)+(!d.after)+(!d.reasons.length); }));
+  const total = totalReq();
+  const done = val("consent")==="はい" ? Math.max(0,total-missingUnits) : 0;
+  $("#count").innerHTML = `必須項目 <b>${done}</b> / ${total}`;
+  $$("#steps button").forEach(a=>{ const s=a.dataset.s; const ok = errs[s].length===0 && (s!=="consent" || val("consent")==="はい");
+    a.classList.toggle("done", ok && val("consent")==="はい"); a.classList.toggle("bad", tried && !ok); });
+  if(tried){ $("#errsum").textContent = n ? `未入力の必須項目があります（赤く表示されている箇所）。` : ""; }
+  return errs;
+}
+
+/* ---------- draft autosave ---------- */
+let saveTimer;
+function snapshot(){
+  const d = {shown:{...shown}, v:{}};
+  $$("#f input, #f textarea").forEach(e=>{
+    if(!e.id) return;
+    if(e.type==="radio"||e.type==="checkbox"){ if(e.checked) d.v[e.id]=true; }
+    else if(e.value) d.v[e.id]=e.value;
+  });
+  return d;
+}
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{ localStorage.setItem(DRAFT_KEY, JSON.stringify(snapshot()));
+      const t=new Date(); $("#save").textContent = `下書き保存 ${t.getHours()}:${String(t.getMinutes()).padStart(2,"0")}`; }
+    catch(e){ $("#save").textContent = ""; }
+  }, 400);
+}
+function restore(){
+  let d=null; try{ d = JSON.parse(localStorage.getItem(DRAFT_KEY)||"null"); }catch(e){}
+  if(!d || !d.v || !Object.keys(d.v).length) return false;
+  ["p1","p2"].forEach(p=>{ while(shown[p] < Math.min(d.shown?.[p]||0, PARTS[p].max)) addRow(p,false); });
+  Object.entries(d.v).forEach(([id,v])=>{ const e=document.getElementById(id); if(!e) return;
+    if(e.type==="radio"||e.type==="checkbox") e.checked = true; else e.value = v; });
+  return true;
+}
+$("#clearDraft").addEventListener("click",()=>{
+  try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
+  $("#f").reset(); $("#restore").hidden = true; tried=false;
+  ["p1","p2"].forEach(p=>{ shown[p]=PARTS[p].start; $$(`.case[data-part="${p}"]`).forEach(r=>r.hidden = +r.dataset.i>shown[p]); updAdd(p); });
+  $$(".has-err").forEach(e=>e.classList.remove("has-err")); $$(".e").forEach(e=>e.classList.remove("e"));
+  $$("textarea").forEach(grow); syncOthers(); refreshStatus(); window.scrollTo(0,0);
+});
+
+function onChange(){ syncOthers(); refreshStatus(); save(); }
+$("#f").addEventListener("input", onChange);
+$("#f").addEventListener("change", onChange);
+
+/* ---------- review ---------- */
+const esc = s => String(s??"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const rtxt = d => d.reasons.map(k=>REASONS[k-1]).join("、") + (d.other?`（${d.other}）`:"");
+function caseHTML(list){
+  if(!list.length) return `<p class="sub">記入なし</p>`;
+  return list.map(d=>`<div class="rv-case"><span class="n">例${d.no}</span>
+    <div><em>変更前</em>${esc(d.before)}</div><div><em>変更後</em>${esc(d.after)}</div><div><em>理由</em>${esc(rtxt(d))}</div></div>`).join("");
+}
+function renderReview(x){
+  const dl = rows => `<dl>${rows.map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)||"—"}</dd>`).join("")}</dl>`;
+  $("#reviewBody").innerHTML =
+    `<h3>基本情報</h3>` + dl([["Q1 施設種別", x.q1 + (x.q1_other?`（${x.q1_other}）`:"")],["Q2 認定薬剤師の取得歴",x.q2],["Q3 会員種別", x.q3 + (x.q3_other?`（${x.q3_other}）`:"")]]) +
+    `<h3>第1部　多く経験した事例（${x.p1.length}例）</h3>` + caseHTML(x.p1) +
+    `<h3>第2部　参考になると思う事例（${x.p2.length}例）</h3>` + caseHTML(x.p2) +
+    `<h3>第3部　症例</h3>` + dl([["患者の年代",x.p3.age],["患者の性別",x.p3.sex],["介護度",x.p3.care],["背景",x.p3.background],["変更前の処方",x.p3.rx_before],["変更後の処方",x.p3.rx_after],["簡素化のポイント・提案理由",x.p3.point]]) +
+    `<h3>ご意見・ご要望</h3>` + dl([["リストの活用意向",x.use],["自由記述",x.comment]]);
+}
+function show(view){
+  $("#formView").hidden = view!=="form"; $("#reviewView").hidden = view!=="review"; $("#doneView").hidden = view!=="done";
+  $("#steps").hidden = view!=="form"; $("#count").hidden = view!=="form";
+  window.scrollTo({top:0, behavior:"auto"});
+}
+$("#f").addEventListener("submit", e=>{
+  e.preventDefault(); tried = true;
+  const errs = refreshStatus();
+  const order = ["consent","basic","p1","p2","p3","op"];
+  const first = order.find(s=>errs[s].length);
+  if(first){
+    const target = $("#s-"+first+" .has-err") || $("#s-"+first);
+    target.scrollIntoView({block:"center"});
+    const f = $("textarea:not([hidden]), input:not([type=hidden]):not([hidden])", target); if(f) f.focus({preventScroll:true});
+    return;
+  }
+  renderReview(collect()); show("review");
+});
+$("#back").addEventListener("click", ()=>show("form"));
+
+/* ---------- send ---------- */
+const API_URL = "https://script.google.com/macros/s/AKfycbxvRkaiFc-dr4WmGUKHLWnwlHJ76JkfaIGGti28C72r9RkKgKprdGTXKFo_Nqbj3Yyc1Q/exec";   // 画面をGoogleの外に置く場合、Apps ScriptのウェブアプリURL（…/exec）をここに入れる
+const IS_GAS = typeof google!=="undefined" && google.script && google.script.run;
+const LIVE = IS_GAS || !!API_URL;
+$("#send").addEventListener("click", ()=>{
+  const btn = $("#send"); btn.disabled = true; btn.textContent = "送信しています…"; $("#sendErr").textContent = "";
+  const payload = collect();
+  const ok = (res)=>{
+    try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
+    show("done");
+    if(!LIVE){ const n=$("#demoNote"); n.hidden=false;
+      n.innerHTML = "<b>プレビュー版のため、回答は送信されていません。</b>本番版（Google Apps Script）では、この時点でGoogleスプレッドシートに1行追加されます。"; }
+  };
+  const ng = (err)=>{ btn.disabled=false; btn.textContent="この内容で送信する";
+    $("#sendErr").textContent = "送信できませんでした。通信状況をご確認のうえ、もう一度「この内容で送信する」を押してください。" + (err && err.message ? `（${err.message}）` : ""); };
+  if(IS_GAS){ google.script.run.withSuccessHandler(ok).withFailureHandler(ng).submitResponse(payload); }
+  else if(API_URL){
+    // Content-Type を text/plain にすると事前確認（preflight）が不要になり、Apps Scriptへ直接送れる
+    fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)})
+      .then(r=>r.json())
+      .then(res=>{ if(res && res.ok) ok(res); else ng(new Error((res && res.error) || "サーバーがエラーを返しました")); })
+      .catch(ng);
+  }
+  else setTimeout(()=>ok({demo:true}), 600);
+});
+
+/* ---------- section tabs (scroll inside the page; no links) ---------- */
+function goSection(sec){
+  let el = document.getElementById("s-"+sec);
+  if(sec!=="consent" && val("consent")!=="はい"){
+    // 同意前は各セクションが非表示なので、同意欄へ案内する
+    el = $('[data-req="consent"]');
+    el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+    $("#errsum").textContent = "";
+  }
+  const y = el.getBoundingClientRect().top + window.scrollY - $("#bar").offsetHeight - 12;
+  window.scrollTo({top: Math.max(0,y), behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+}
+$$("#steps button").forEach(b=>b.addEventListener("click", ()=>goSection(b.dataset.s)));
+// 現在見ているセクションのタブを強調
+let spyRAF = 0;
+window.addEventListener("scroll", ()=>{ if(spyRAF) return; spyRAF = requestAnimationFrame(()=>{ spyRAF = 0;
+  const line = $("#bar").offsetHeight + 40; let cur = "consent";
+  $$("section.part").forEach(sec=>{ if(!sec.closest("[hidden]") && sec.getBoundingClientRect().top <= line) cur = sec.dataset.s; });
+  if(val("consent")==="はい" && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = "op";
+  $$("#steps button").forEach(b=>b.classList.toggle("cur", b.dataset.s===cur));
+});}, {passive:true});
+
+/* ---------- init ---------- */
+if(restore()) $("#restore").hidden = false;
+syncOthers(); refreshStatus();
+requestAnimationFrame(()=>$$("textarea").forEach(grow));
+})();
+</script>
+
+</body>
+</html>
