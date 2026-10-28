@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+<base target="_top">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>服薬簡素化関連事例の実態調査</title>
-<meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=BIZ+UDPMincho:wght@700&display=swap">
 <style>
@@ -201,6 +199,32 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
 .def-note{font-size:14px}
 .end-note{margin-top:12px;padding:12px 16px;border:1px solid var(--accent);background:var(--accent-soft);border-radius:4px;max-width:70ch;line-height:1.8}
 .end-note .small{font-size:13px;color:var(--muted)}
+
+
+/* ===== 選択肢：3項目を横に並べ、縦にそろえる（コード表型） ===== */
+main.sheet .c-codes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:2px 10px 12px;padding:0!important;border:1px solid var(--rule)!important;border-radius:4px;overflow:hidden}
+main.sheet .c-codes .cg{border:0;border-radius:0;padding:0 0 8px}
+main.sheet .c-codes .cg + .cg{border-left:1px solid var(--rule)}
+main.sheet .c-codes .cg.e{background:var(--warn-soft);box-shadow:inset 0 0 0 2px var(--warn)}
+main.sheet .c-codes .cg-head{background:var(--accent-soft);color:var(--ink);padding:6px 10px;margin:0 0 4px;font-size:13px;line-height:1.4;min-height:3.2em;display:flex;flex-direction:column;justify-content:center}
+main.sheet .c-codes .cg-head span{font-size:11.5px;color:var(--muted)}
+main.sheet .c-codes .cg-chips{display:flex;flex-direction:column;gap:1px;padding:0 4px}
+main.sheet .c-codes .rs{border:0;background:transparent;border-radius:3px;padding:4px 6px;width:100%;align-items:flex-start;font-size:13.5px}
+main.sheet .c-codes .rs input{margin-top:2px}
+main.sheet .c-codes .rs:has(input:checked){background:var(--accent-soft)}
+main.sheet .c-codes .rs .rs-n{min-width:1.2em}
+main.sheet .c-codes .cg-other{padding:0 10px}
+main.sheet .c-codes .cg-other input{max-width:100%}
+main.sheet .kv .cg-chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+main.sheet .kv .rs{border-radius:4px;width:100%;align-items:flex-start;font-size:13.5px}
+main.sheet .kv .rs input{margin-top:2px}
+@media (max-width:760px){
+  main.sheet .c-codes{grid-template-columns:1fr;margin:4px 12px 10px}
+  main.sheet .c-codes .cg + .cg{border-left:0;border-top:1px solid var(--rule)}
+  main.sheet .c-codes .cg-head{min-height:0}
+  main.sheet .c-codes .rs{padding:5px 6px}
+  main.sheet .kv .cg-chips{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 
 /* phone */
 @media (max-width:760px){
@@ -763,7 +787,7 @@ $("#f").addEventListener("submit", e=>{
 });
 
 /* ---------- send ---------- */
-const API_URL = "https://script.google.com/macros/s/AKfycbx9Flhfw8UEe31dkt3EhQ-RKQZC__SR9AuK10rB8JA0BkRoBOgqECObMDYOhCfv3NU/exec";   // 画面をGoogleの外に置く場合、Apps ScriptのウェブアプリURL（…/exec）をここに入れる
+const API_URL = "https://script.google.com/macros/s/AKfycbxy2o57ug9rEUh1Zm8p38S5DV-sIAs-IcGUCoEv0VXolsMVWjUrTrtrALzdQLFL9cor/exec";   // 画面をGoogleの外に置く場合、Apps ScriptのウェブアプリURL（…/exec）をここに入れる
 const IS_GAS = typeof google!=="undefined" && google.script && google.script.run;
 const LIVE = IS_GAS || !!API_URL;
 let sending = false;
