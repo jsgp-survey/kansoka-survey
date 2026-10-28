@@ -79,6 +79,7 @@ section.part[hidden]{display:none}
 .ethics h3{font-size:14px;margin:14px 0 2px}
 .ethics h3:first-child{margin-top:0}
 .ethics p{margin:0}
+.ethics p.coop{margin-top:8px;padding-top:8px;border-top:1px dashed var(--rule)}
 .ethics ul{margin:0;padding-left:1.2em}
 
 /* questions */
@@ -113,7 +114,7 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
 
 /* case grid */
 .grid{margin-top:14px;border:1px solid var(--rule);border-radius:4px;overflow:hidden}
-.g-row{display:grid;grid-template-columns:3.2rem minmax(0,1fr) minmax(0,1fr) repeat(5,4.4rem);border-top:1px solid var(--rule)}
+.g-row{display:grid;grid-template-columns:3.2rem minmax(0,1fr) minmax(0,1fr);border-top:1px solid var(--rule)}
 .g-row:first-child{border-top:0}
 .g-row > div{padding:8px 10px;min-width:0}
 .g-row > div + div{border-left:1px solid var(--rule-soft)}
@@ -128,15 +129,23 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
 .copy{margin-top:4px;font:inherit;font-size:12.5px;color:var(--accent);background:none;border:0;padding:2px 0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .copy:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 /* reason: check mode (five check columns) */
-.c-rs{display:contents}
-.rs{display:flex;align-items:center;justify-content:center;cursor:pointer;border-left:1px solid var(--rule-soft);padding:8px 4px}
-.rs .rs-n, .rs .rs-t{display:none}
-.rs input{width:22px;height:22px;accent-color:var(--accent);margin:0;flex:none;cursor:pointer}
-.rs:has(input:checked){background:var(--accent-soft)}
+.c-rs{grid-column:2/-1;display:flex;flex-wrap:wrap;gap:6px;padding:2px 10px 10px!important;border-left:0!important}
+.c-rs .rs-head{width:100%;font-size:12.5px;font-weight:700;color:var(--muted)}
+.rs{display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:1px solid var(--rule);border-radius:999px;padding:4px 12px 4px 10px;font-size:14px;line-height:1.45;background:var(--field);user-select:none}
 .rs:hover{background:var(--accent-soft)}
-.h-check{font-size:11.5px!important;line-height:1.35;text-align:center;padding:6px 3px!important;font-weight:700}
-.h-check b{display:block;font-size:15px}
-.ex-check{text-align:center;font-size:16px}
+.rs:has(input:checked){background:var(--accent-soft);border-color:var(--accent);font-weight:700}
+.rs input{width:18px;height:18px;accent-color:var(--accent);margin:0;flex:none;cursor:pointer}
+.rs:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.rs .rs-n{color:var(--accent)}
+.ex-reason{grid-column:2/-1;font-size:14px}
+.intro{margin-top:30px}
+.intro h3{font-size:15px;margin:18px 0 4px;font-family:var(--f-body)}
+.intro p{margin:0;max-width:70ch}
+.def-list{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px;max-width:70ch}
+.def-list li{display:grid;grid-template-columns:2rem minmax(0,1fr);gap:0 6px;border:1px solid var(--rule);border-radius:4px;padding:8px 12px;background:var(--field)}
+.def-list .dn{font-weight:700;color:var(--accent);font-size:17px;grid-row:span 2;line-height:1.5}
+.def-list .dt{font-weight:700}
+.def-list .de{font-size:14px;color:var(--muted)}
 .c-other{grid-column:1/-1;padding:0 10px 10px 3.8rem!important;border-left:0!important;display:flex;align-items:center;gap:8px;font-size:13px}
 .c-other label{white-space:nowrap;color:var(--muted);font-weight:700}
 .c-other input{max-width:420px;font-size:14px!important;padding:5px 8px!important}
@@ -184,11 +193,8 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
   .c-no::before{content:"例"}
   .m-label{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:2px}
   .g-row{grid-template-columns:1fr}
-  .c-rs{display:flex;flex-wrap:wrap;gap:6px;padding:6px 12px}
-  .c-rs::before{content:"簡素化の理由（当てはまるものすべてにチェック）";display:block;width:100%;font-size:12.5px;font-weight:700;color:var(--muted)}
-  .rs{border:1px solid var(--rule);border-radius:999px;padding:5px 12px;gap:6px;justify-content:flex-start;font-size:14px}
-  .rs .rs-n, .rs .rs-t{display:inline}
-  .rs input{width:18px;height:18px}
+  .c-rs{grid-column:1;padding:6px 12px 8px!important}
+  .ex-reason{grid-column:1}
   .c-other{padding:0 12px 8px!important;flex-wrap:wrap}
 
   .kv-row{grid-template-columns:1fr}
@@ -250,7 +256,8 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
       <h3>1. 研究の名称及び当該研究の実施について研究機関の長の許可を受けている旨</h3>
       <p>研究課題名：「日本老年薬学会会員を対象とした服薬簡素化の実態に関するアンケート調査」本研究課題については、AMG医療法人社団哺育会 桜ヶ丘中央病院 倫理審査委員会による倫理審査を経て、研究機関の長（桜ヶ丘中央病院 院長）の実施許可（R81019）を受けております。また、研究責任者の所属機関（介護老人保健施設横浜あおばの里）においても、施設長の実施許可を受けております。</p>
       <h3>2. 研究機関の名称及び責任者</h3>
-      <p>日本老年薬学会 服薬簡素化活性化ワーキンググループ<br>研究責任者（代表）丸岡 弘治（介護老人保健施設横浜あおばの里）<br>研究分担者　秋下 雅弘（東京都健康長寿医療センター）、新井 克明（大洗海岸病院）、黄倉 崇（帝京大学）、大河内 二郎（介護老人保健施設竜間之郷）、倉田 なおみ（昭和医科大学）、糀屋 絵理子（大阪大学）、竹屋 泰（大阪大学大学院）、篠永 浩（三豊総合病院）、早乙女 彩子（のぞみ薬局）、浜田 将太（東京薬科大学）、東原 和美（バプテスト老人保健施設）、溝神 文博（国立長寿医療研究センター）<br>研究協力者　副島 將司（桜ヶ丘中央病院）</p>
+      <p>日本老年薬学会 服薬簡素化活性化ワーキンググループ<br><b>研究責任者（代表）</b>丸岡 弘治（介護老人保健施設横浜あおばの里）<br><b>研究分担者</b>　秋下 雅弘（東京都健康長寿医療センター）、新井 克明（大洗海岸病院）、黄倉 崇（帝京大学）、大河内 二郎（介護老人保健施設竜間之郷）、倉田 なおみ（昭和医科大学）、糀屋 絵理子（大阪大学）、竹屋 泰（大阪大学大学院）、篠永 浩（三豊総合病院）、早乙女 彩子（のぞみ薬局）、浜田 将太（東京薬科大学）、東原 和美（バプテスト老人保健施設）、溝神 文博（国立長寿医療研究センター）</p>
+      <p class="coop"><b>研究協力者</b>　副島 將司（桜ヶ丘中央病院）</p>
       <h3>3. 研究の目的及び意義</h3>
       <p>本研究は、日本老年薬学会会員の臨床経験に基づき、服薬簡素化（服用時点の統一、回数削減、他剤同効薬への変更、持続性製剤への変更など）に該当する薬剤の実態を把握し、「服薬簡素化該当薬剤リスト」の作成に資する基礎データを得ることを目的とします。本研究の成果は、薬剤師をはじめとする医療者が処方提案を行う際の実践的な資料として活用されることが期待されます。</p>
       <h3>4. 研究の方法及び期間</h3>
@@ -289,6 +296,19 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
 
   <div id="body" hidden>
   <!-- 基本情報 -->
+  <section class="part intro" id="s-intro" data-s="basic">
+    <div class="part-head"><h2>調査の概要</h2></div>
+    <h3>【対象者】</h3>
+    <p>日本老年薬学会会員のうち、業務上、服薬簡素化または服薬・与薬負担の軽減に関わった経験のある方</p>
+    <h3>【調査の目的】</h3>
+    <p>本調査は、会員の皆様が現場で経験された服薬簡素化に関する事例を収集し、今後の実践例の整理、教育資材作成、普及活動に活用することを目的としています。個々の事例の適否や推奨可否を判断するものではありません。</p>
+    <h3>【服薬簡素化の定義】</h3>
+    <p>本学会WGでは、これまで服薬簡素化を主に「服薬回数を減らすこと」、すなわち、可能な範囲で服薬時点や服薬回数を減らし、患者本人、家族、介護職員等の服薬・与薬に関わる負担を軽減する取り組みとして整理してきました。</p>
+    <p style="margin-top:8px">一方、本調査では、現場で行われている服薬簡素化関連事例の実態を広く把握するため、狭義の「服薬回数の削減」に限らず、服薬負担または与薬負担の軽減につながる以下のような事例も含めてご回答ください。</p>
+    <p style="margin-top:8px"><b>該当するものをすべて選択してください。</b></p>
+    <ol class="def-list" id="defList"></ol>
+  </section>
+
   <section class="part" id="s-basic" data-s="basic">
     <div class="part-head"><h2>基本情報</h2></div>
     <div class="q" data-req="q1">
@@ -313,8 +333,7 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
   <!-- 第1部 -->
   <section class="part" id="s-p1" data-s="p1">
     <div class="part-head"><h2>第1部　多く経験した服薬簡素化の事例</h2><span class="tag">最大10例</span></div>
-    <p class="lead">臨床で多く経験した服薬簡素化の事例をご記入ください。<b>例1〜3は必須</b>、例4〜10は任意です。簡素化の理由は、当てはまる番号の欄すべてにチェックしてください。</p>
-    <div class="legend" aria-hidden="true"><span>① 服用時点の統一</span><span>② 回数削減</span><span>③ 他剤同効薬への変更</span><span>④ 持続性製剤への変更</span><span>⑤ その他</span></div>
+    <p class="lead">臨床で多く経験した服薬簡素化の事例をご記入ください。<b>例1〜3は必須</b>、例4〜10は任意です。簡素化の理由は、当てはまるものをすべてチェックしてください（定義は「調査の概要」をご参照ください）。</p>
     <div class="grid" id="p1grid"></div>
     <button type="button" class="add" id="p1add"></button>
   </section>
@@ -395,7 +414,10 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
 const $ = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
 const DRAFT_KEY = "fukuyaku-kansoka-2026-draft";
-const REASONS = ["① 服用時点の統一","② 回数削減","③ 他剤同効薬への変更","④ 持続性製剤への変更","⑤ その他"];
+const REASONS = ["① 服用時点の統一・集約","② 服用回数の削減","③ 同効薬・代替薬への変更による簡素化","④ 持続性製剤・徐放性製剤等への変更","⑤ 剤形変更による服薬負担の軽減","⑥ 合剤への変更による服薬負担の軽減","⑦ その他、服薬・与薬の負担軽減につながる変更"];
+const REASON_EX = ["朝・昼・夕に分かれていた薬を、昼または朝など特定の時点にまとめた。","1日3回服用を1日1回または1日2回に変更した。","1日2回製剤から1日1回製剤へ変更した。","短時間作用型製剤から長時間作用型製剤へ変更した。","錠剤からOD錠、散剤、貼付剤、液剤等へ変更し、服薬しやすくした。","複数の薬剤を配合剤に変更し、服薬する剤数または錠数を減らした。","一包化、服薬タイミングの整理、施設での与薬手順の簡略化など。"];
+const NR = REASONS.length;
+$("#defList").innerHTML = REASONS.map((r,k)=>`<li><span class="dn">${r[0]}</span><span class="dt">${r.slice(2)}</span><span class="de">例：${REASON_EX[k]}</span></li>`).join("");
 const OPTS = {
   q1: ["病院","保険薬局","介護老人保健施設","介護医療院","特別養護老人ホーム","その他"],
   q2: ["有る","無い"],
@@ -427,11 +449,10 @@ choices("age","#agec"); choices("sex","#sexc"); choices("care","#carec"); choice
 /* ---------- build case grids ---------- */
 function buildGrid(p){
   const cfg = PARTS[p], g = $("#"+p+"grid");
-  const exN = "①②③④⑤".indexOf(cfg.ex.r)+1;
-  g.innerHTML = `<div class="g-row g-head"><div>#</div><div>変更前（薬剤名・用量・用法）</div><div>変更後（薬剤名・用量・用法）</div>
-    ${REASONS.map(r=>`<div class="h-check"><b>${r[0]}</b>${r.slice(2)}</div>`).join("")}</div>
+  const exN = "①②③④⑤⑥⑦".indexOf(cfg.ex.r)+1;
+  g.innerHTML = `<div class="g-row g-head"><div>#</div><div>変更前（薬剤名・用量・用法）</div><div>変更後（薬剤名・用量・用法）</div></div>
   <div class="g-row g-ex" aria-hidden="true"><div class="c-no">記入例</div><div>${cfg.ex.b}</div><div>${cfg.ex.a}</div>
-    ${[1,2,3,4,5].map(k=>`<div class="ex-check">${k===exN?"✓":""}</div>`).join("")}</div>`;
+    <div class="ex-reason">簡素化の理由：${REASONS[exN-1]}</div></div>`;
   for(let i=1;i<=cfg.max;i++){
     const req = i<=cfg.req;
     const row = document.createElement("div");
@@ -441,10 +462,10 @@ function buildGrid(p){
       <div><label class="m-label" for="${p}_${i}_b">変更前</label><textarea id="${p}_${i}_b" rows="2" aria-label="例${i} 変更前"></textarea></div>
       <div><label class="m-label" for="${p}_${i}_a">変更後</label><textarea id="${p}_${i}_a" rows="2" aria-label="例${i} 変更後"></textarea>
         <button type="button" class="copy" data-copy="${p}_${i}">← 変更前を写して編集</button></div>
-      <div class="c-rs">
-        ${REASONS.map((r,k)=>`<label class="rs" title="${r}"><input type="checkbox" id="${p}_${i}_r${k+1}" value="${k+1}" aria-label="例${i} ${r}"><span class="rs-n">${r[0]}</span><span class="rs-t">${r.slice(2)}</span></label>`).join("")}
+      <div class="c-rs"><span class="rs-head">簡素化の理由（当てはまるものすべてにチェック）</span>
+        ${REASONS.map((r,k)=>`<label class="rs" title="例：${REASON_EX[k]}"><input type="checkbox" id="${p}_${i}_r${k+1}" value="${k+1}" aria-label="例${i} ${r}"><span class="rs-n">${r[0]}</span><span class="rs-t">${r.slice(2)}</span></label>`).join("")}
       </div>
-      <div class="c-other" hidden><label for="${p}_${i}_o">⑤ その他の内容（任意）</label><input type="text" id="${p}_${i}_o"></div>
+      <div class="c-other" hidden><label for="${p}_${i}_o">⑦ その他の内容（任意）</label><input type="text" id="${p}_${i}_o"></div>
       <div class="errmsg"></div>`;
     if(i>shown[p]) row.hidden = true;
     g.appendChild(row);
@@ -483,7 +504,7 @@ $("#p3copy").addEventListener("click",()=>{ const b=$("#p3_rxb"), a=$("#p3_rxa")
 function syncOthers(){
   $("#q1_other").hidden = !$("#q1_5").checked;
   $("#q3_other").hidden = !$("#q3_4").checked;
-  $$(".case").forEach(r=>{ const p=r.dataset.part,i=r.dataset.i; $(".c-other",r).hidden = !$(`#${p}_${i}_r5`).checked; });
+  $$(".case").forEach(r=>{ const p=r.dataset.part,i=r.dataset.i; $(".c-other",r).hidden = !$(`#${p}_${i}_r7`).checked; });
   const c = val("consent");
   $("#body").hidden = c!=="はい";
   $("#declined").hidden = c!=="いいえ";
@@ -493,8 +514,8 @@ function syncOthers(){
 function val(name){ const x = $(`input[name="${name}"]:checked`); return x ? x.value : ""; }
 function txt(id){ const e=$("#"+id); return e ? e.value.trim() : ""; }
 function caseData(p,i){
-  const reasons = [1,2,3,4,5].filter(k=>$(`#${p}_${i}_r${k}`).checked);
-  return {no:i, before:txt(`${p}_${i}_b`), after:txt(`${p}_${i}_a`), reasons, other: reasons.includes(5)?txt(`${p}_${i}_o`):""};
+  const reasons = [1,2,3,4,5,6,7].filter(k=>$(`#${p}_${i}_r${k}`).checked);
+  return {no:i, before:txt(`${p}_${i}_b`), after:txt(`${p}_${i}_a`), reasons, other: reasons.includes(7)?txt(`${p}_${i}_o`):""};
 }
 function collect(){
   const parts = {};
@@ -631,7 +652,7 @@ $("#f").addEventListener("submit", e=>{
 });
 
 /* ---------- send ---------- */
-const API_URL = "https://script.google.com/macros/s/AKfycbzWNVLjTpPfqFYdHj9PPb_0ZyzlwF6owR-GifYfCgNQVFzxpkFGY3jpYu1zMXuTJi8G/exec";   // 画面をGoogleの外に置く場合、Apps ScriptのウェブアプリURL（…/exec）をここに入れる
+const API_URL = "https://script.google.com/macros/s/AKfycbxVEE8k2H-FHCt8l2ojUETgtqDmvTxTjkhDPW8aJmvVKBor53MvvCgE7fo-sF0omGu-/exec";   // 画面をGoogleの外に置く場合、Apps ScriptのウェブアプリURL（…/exec）をここに入れる
 const IS_GAS = typeof google!=="undefined" && google.script && google.script.run;
 const LIVE = IS_GAS || !!API_URL;
 let sending = false;
