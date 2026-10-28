@@ -48,6 +48,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .steps button.done{color:var(--ok);border-bottom-color:var(--ok)}
 .steps button.done::before{content:"✓ "}
 .steps button.bad{color:var(--warn);border-bottom-color:var(--warn)}
+.steps button.off{opacity:.45}
 .steps button.cur{font-weight:700;color:var(--ink);background:var(--accent-soft)}
 .steps button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .flash{animation:flash 1.6s ease-out}
@@ -198,6 +199,8 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
 .intro .small{font-size:13.5px;color:var(--muted)}
 .lead.small-lead{font-size:14px;color:var(--muted);margin-top:4px}
 .def-note{font-size:14px}
+.end-note{margin-top:12px;padding:12px 16px;border:1px solid var(--accent);background:var(--accent-soft);border-radius:4px;max-width:70ch;line-height:1.8}
+.end-note .small{font-size:13px;color:var(--muted)}
 
 /* phone */
 @media (max-width:760px){
@@ -280,7 +283,7 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
       <h3>3. 研究の目的及び意義</h3>
       <p>本研究は、日本老年薬学会会員の臨床経験に基づき、服薬簡素化（服用時点の統一、回数削減、他剤同効薬への変更、持続性製剤への変更など）に該当する薬剤の実態を把握し、「服薬簡素化該当薬剤リスト」の作成に資する基礎データを得ることを目的とします。本研究の成果は、薬剤師をはじめとする医療者が処方提案を行う際の実践的な資料として活用されることが期待されます。</p>
       <h3>4. 研究の方法及び期間</h3>
-      <p>1) 研究デザイン：質問票を用いた研究（個人を特定できないようにしたアンケート調査）<br>2) 方法：日本老年薬学会の会員向けメーリングリスト等を活用し、協力者を募ります。<br>3) データ収集：インターネット経由でデータを入力し、研究責任者の所属施設（介護老人保健施設横浜あおばの里）にて集計を行います。<br>4) 調査項目：基本情報（施設種別、老年薬学認定薬剤師の取得歴、会員種別）／服薬簡素化の事例（変更前後の処方、簡素化の理由）および参考となる症例1例／服薬簡素化リストの活用意向、ご意見・ご要望<br>5) 収集したデータの流れ：研究責任者にてアンケートデータを収集・解析を行い、加工前のデータは他施設と共有しません。<br>研究期間：倫理委員会承認日〜2026年10月19日<br>アンケート調査期間：2026年10月27日（火）〜 2026年12月31日（木）</p>
+      <p>1) 研究デザイン：質問票を用いた研究（個人を特定できないようにしたアンケート調査）<br>2) 方法：日本老年薬学会の会員向けメーリングリスト等を活用し、協力者を募ります。<br>3) データ収集：インターネット経由でデータを入力し、研究責任者の所属施設（介護老人保健施設横浜あおばの里）にて集計を行います。<br>4) 調査項目：基本情報（施設種別、老年薬学認定薬剤師の取得歴、会員種別）／服薬簡素化の事例（変更前後の処方、簡素化の理由）および参考となる症例1例／服薬簡素化リストの活用意向、ご意見・ご要望<br>5) 収集したデータの流れ：研究責任者にてアンケートデータを収集・解析を行い、加工前のデータは他施設と共有しません。<br>研究期間：倫理委員会承認日〜2028年3月31日<br>アンケート調査期間：2026年10月27日（火）〜 2026年12月31日（木）</p>
       <h3>5. 研究対象者として選定された理由</h3>
       <p>同意を得られた、日本老年薬学会の会員で高齢者に対する服薬支援の臨床経験を有する方が対象となります。</p>
       <h3>6. 研究対象者に生じる負担並びに予測されるリスク及び利益</h3>
@@ -339,6 +342,10 @@ input[type=text]:focus,textarea:focus{outline:2px solid var(--accent);outline-of
       <span class="q-label"><span class="q-num">Q1</span>これまでに、業務上、服薬簡素化または服薬・与薬負担の軽減に関わった経験がありますか。<span class="reqtag">必須</span></span>
       <div class="choices" id="q1c"></div>
       <div class="errmsg">選択してください。</div>
+      <div class="end-note" id="q1end" hidden>
+        <b>ご回答ありがとうございました。</b><br>本調査は、業務上、服薬簡素化または服薬・与薬負担の軽減に関わった経験のある方を対象としています。アンケートはここで終了となります。このページを閉じてください。<br>
+        <span class="small">選択を誤った場合は、「はい」を選び直すと回答を続けられます。</span>
+      </div>
     </div>
     <div class="q" data-req="q2">
       <span class="q-label"><span class="q-num">Q2</span>あなたの主な職種を教えてください。<span class="reqtag">必須</span></span>
@@ -621,6 +628,12 @@ function syncOthers(){
   $("#q4_other").hidden = !vals("q4").includes("その他");
   $$(".cg").forEach(cg=>{ const k=cg.id.lastIndexOf("_"), pre=cg.id.slice(0,k), g=cg.id.slice(k+1);
     $(".cg-other",cg).hidden = !groupVal(pre,g).includes(GROUPS[g].other); });
+  // Q1「いいえ」は対象外：Q2以降と送信ボタンを隠して終了
+  const out = val("q1")==="いいえ";
+  $("#q1end").hidden = !out;
+  $$('#s-basic .q:not([data-req="q1"])').forEach(q=>q.hidden = out);
+  ["s-p1","s-p2","s-p3","s-hr","s-op"].forEach(id=>document.getElementById(id).hidden = out);
+  $(".actions").hidden = out;
   const c = val("consent");
   $("#body").hidden = c!=="はい";
   $("#declined").hidden = c!=="いいえ";
@@ -683,7 +696,8 @@ function refreshStatus(){
   const done = yes ? 1 + REQ.filter(k=>!errs.basic.includes(k)).length + (errs.op.length?0:1) : 0;
   $("#count").innerHTML = `必須項目 <b>${done}</b> / ${total}`;
   $$("#steps button").forEach(a=>{ const s=a.dataset.s; const ok = errs[s].length===0 && (s!=="consent" || yes);
-    a.classList.toggle("done", yes && ok && filled(s)); a.classList.toggle("bad", tried && !ok); });
+    const off = val("q1")==="いいえ" && ["p1","p2","p3","hr","op"].includes(s);
+    a.classList.toggle("done", !off && yes && ok && filled(s)); a.classList.toggle("bad", !off && tried && !ok); a.classList.toggle("off", off); });
   const n = Object.values(errs).reduce((a,b)=>a+b.length,0);
   if(tried){ $("#errsum").textContent = n ? "未入力・要確認の項目があります（赤く表示されている箇所）。" : ""; }
   return errs;
@@ -783,6 +797,9 @@ function goSection(sec){
   if(sec!=="consent" && val("consent")!=="はい"){
     el = $('[data-req="consent"]');
     el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+  } else if(el && el.hidden){
+    el = $('[data-req="q1"]');
+    el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
   }
   const y = el.getBoundingClientRect().top + window.scrollY - $("#bar").offsetHeight - 12;
   window.scrollTo({top: Math.max(0,y), behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
@@ -792,7 +809,7 @@ let spyRAF = 0;
 window.addEventListener("scroll", ()=>{ if(spyRAF) return; spyRAF = requestAnimationFrame(()=>{ spyRAF = 0;
   const line = $("#bar").offsetHeight + 40; let cur = "consent";
   $$("section.part").forEach(sec=>{ if(!sec.closest("[hidden]") && sec.getBoundingClientRect().top <= line) cur = sec.dataset.s; });
-  if(val("consent")==="はい" && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = "op";
+  if(val("consent")==="はい" && val("q1")!=="いいえ" && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = "op";
   $$("#steps button").forEach(b=>b.classList.toggle("cur", b.dataset.s===cur));
 });}, {passive:true});
 
